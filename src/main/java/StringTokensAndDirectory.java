@@ -2,8 +2,9 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 public class StringTokensAndDirectory {
     public static final File DIRECTORY = new File("/home/futurum/Downloads/TemporaryDirectory");
@@ -22,7 +23,7 @@ public class StringTokensAndDirectory {
     }
 
 
-    public String[] getArrayOfClearContents(String[] stringReports) {
+    public String[] getSplitArray(String[] stringReports) {
         for (int i = 0; i < stringReports.length; i++) {
             stringReports[i] = Arrays.toString(stringReports[i].split("_"));
         }
@@ -79,52 +80,69 @@ public class StringTokensAndDirectory {
         }
     }
 
-    public void createDirectory(String[] stringTokens) {
-        File rro_reports = new File("/home/futurum/Downloads/RRO");
-        String patient = "";
-        String date = "";
-
+    public String[] removeNullAndBlankSpaces(String[] stringTokens) {
 
         String[] firstArray = Arrays.stream(stringTokens)
                 .filter(s -> (s != null && s.length() > 0))
                 .toArray(String[]::new);
-
-        System.out.println(Arrays.toString(firstArray));
-
-        List<String> strings = Arrays.asList(firstArray);
-        for (String string : strings) {
-            if (string.matches("\\d+"));
-            date = string;
-        } patient = strings.get(1);
-
-        //        for (int i = 0; i < firstArray.length; i++) {
-       //          patient = stringTokens[i] + " " + stringTokens[i+ 1] + " " + stringTokens[i+2] + " " + stringTokens[i + 3] + " " + stringTokens[i + 4];
-      //         date = stringTokens[i + 5];
-
-
-
-        File directory = new File(rro_reports + "/" + patient);
-            File dateDirectory = new File(directory + "/" + date);
-
-            if (!rro_reports.exists()) {
-                if (rro_reports.mkdir()) {
-                    System.out.println("dir created");
-                }
-
-                if (!directory.exists()) {
-                    if (directory.mkdir()) {
-                        System.out.println("subdir created");
-                    }
-
-                    if (!dateDirectory.exists()) {
-                        if (dateDirectory.mkdir()) {
-                            System.out.println("subdir created");
-                        }
-                    }
-                }
-            }
-        }
+        return firstArray;
     }
+
+    public String[] getAllMatches(String[] firstArray) {
+
+        for (String s : firstArray) {
+            String[] matches = Pattern.compile("\\D+\\d\\d\\d\\d-\\d\\d-\\d\\d")
+                    .matcher(s)
+                    .results()
+                    .map(MatchResult::group)
+                    .toArray(String[]::new);
+            return matches;
+        }
+        return null;
+    }
+}
+
+//List<String> allMatches = new ArrayList<String>();
+//        Pattern pattern = Pattern.compile("\\D+\\d\\d\\d\\d-\\d\\d-\\d\\d");
+//
+//        for (int i = 0; i < firstArray.length; i++) {
+//
+//            Matcher matcher = pattern.matcher(firstArray[i]);
+//
+//            if (matcher.matches()) {
+//                allMatches.add(matcher.group());
+//
+//            }
+//        }
+//        return allMatches;
+
+//
+//            File rro_reports = new File("/home/futurum/Downloads/RRO");
+//            String patient = "";
+//            String date = "";
+
+//        File directory = new File(rro_reports + "/" + patient);
+//            File dateDirectory = new File(directory + "/" + date);
+//
+//            if (!rro_reports.exists()) {
+//                if (rro_reports.mkdir()) {
+//                    System.out.println("dir created");
+//                }
+//
+//                if (!directory.exists()) {
+//                    if (directory.mkdir()) {
+//                        System.out.println("subdir created");
+//                    }
+//
+//                    if (!dateDirectory.exists()) {
+//                        if (dateDirectory.mkdir()) {
+//                            System.out.println("subdir created");
+//                        }
+//                    }
+//                }
+//            }
+
+
 
 
 
@@ -206,3 +224,14 @@ public class StringTokensAndDirectory {
 //                String sureName = stringTokens[i1];
 //                for (int i2 = 2; i2 < stringTokens.length; i2 += 3) {
 //                    String date = stringTokens[i2];
+
+//List<String> strings = Arrays.asList(firstArray);
+//        for (String string : strings) {
+//            if (string.matches("\\d+")) ;
+//            date = string;
+//        }
+//        patient = strings.get(1);
+//
+//        for (int i = 0; i < firstArray.length; i++) {
+//            patient = stringTokens[i] + " " + stringTokens[i + 1] + " " + stringTokens[i + 2] + " " + stringTokens[i + 3] + " " + stringTokens[i + 4];
+//            date = stringTokens[i + 5];

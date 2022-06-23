@@ -10,7 +10,7 @@ public class Main {
          final File file = new File("/home/futurum/Downloads/TemporaryDirectory");
          final String[] arrayOfStrings = file.list();
 
-        String[] arrayOfClearContents = tokens.getArrayOfClearContents(arrayOfStrings);
+        String[] arrayOfClearContents = tokens.getSplitArray(arrayOfStrings);
         String[] strings = tokens.trimFileName(arrayOfStrings);
         String[] patientNameAndTimestamp = tokens.getPatientNameAndTimestamp(strings);
         String[] tokensArray = tokens.getTokensArray(Arrays.toString(patientNameAndTimestamp), ",. []/");
@@ -18,12 +18,11 @@ public class Main {
 
         tokens.removeIdsFromReportsDetails(tokensArray);
         tokens.createDateFromTimestamp(tokensArray);
-        System.out.println(Arrays.toString(tokensArray));
-        tokens.createDirectory(tokensArray);
+        String[] strings1 = tokens.removeNullAndBlankSpaces(tokensArray);
 
-
-
-
+        System.out.println(Arrays.toString(strings1));
+        String[] allMatches = tokens.getAllMatches(strings1);
+        System.out.println(Arrays.toString(allMatches));
 
 
     }
